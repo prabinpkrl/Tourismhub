@@ -1,365 +1,230 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { MapPin, Calendar, AlertTriangle, Info, CheckCircle, Clock, Users } from "lucide-react"
+import { motion } from "framer-motion";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  AlertTriangle,
+  Info,
+  CheckCircle,
+  Calendar,
+  MapPin,
+  MapIcon,
+} from "lucide-react";
 
-export default function TravelUpdates() {
-  const latestUpdates = [
+export default function TravelUpdatesPage() {
+  const updates = [
     {
+      id: 1,
+      type: "advisory",
+      title: "Weather Advisory: Mountain Regions",
+      date: "January 28, 2024",
+      location: "Mountain Region",
+      priority: "high",
+      content:
+        "Heavy snowfall expected in mountain regions from January 30-February 2. Trekking activities may be affected. Travelers are advised to check weather conditions and carry appropriate gear.",
+      icon: <AlertTriangle className="w-5 h-5" />,
+    },
+    {
+      id: 2,
+      type: "info",
+      title: "New Cultural Site Opening",
+      date: "January 25, 2024",
+      location: "Cultural District",
+      priority: "medium",
+      content:
+        "The newly restored Heritage Museum will open to public on February 1st. Special guided tours available for the first week. Advance booking recommended.",
+      icon: <Info className="w-5 h-5" />,
+    },
+    {
+      id: 3,
+      type: "success",
+      title: "Road Repairs Completed",
+      date: "January 22, 2024",
+      location: "Valley Region",
+      priority: "low",
+      content:
+        "Major road repairs on the Valley Highway have been completed. Normal traffic flow has resumed. Travel time to popular destinations reduced by 30 minutes.",
+      icon: <CheckCircle className="w-5 h-5" />,
+    },
+    {
+      id: 4,
+      type: "advisory",
+      title: "Festival Season Traffic",
       date: "January 20, 2024",
-      title: "New Trekking Permits System Launched",
-      category: "Permits & Regulations",
-      priority: "high",
-      description: "Digital permit system now available for all major trekking routes. Online applications accepted.",
-      details: [
-        "Online application process streamlined",
-        "Digital permits available on mobile",
-        "Reduced processing time to 24 hours",
-        "Integration with guide booking system",
-      ],
-      impact: "All trekkers",
-      status: "active",
-    },
-    {
-      date: "January 18, 2024",
-      title: "Weather Advisory: Clear Skies Expected",
-      category: "Weather",
+      location: "All Regions",
       priority: "medium",
-      description: "Excellent weather conditions forecasted for the next two weeks. Perfect for mountain activities.",
-      details: [
-        "Clear visibility above 3000m",
-        "Stable weather patterns",
-        "Minimal precipitation expected",
-        "Ideal conditions for photography",
-      ],
-      impact: "Mountain regions",
-      status: "active",
+      content:
+        "Increased traffic expected during upcoming festival season (March 15-April 15). Book transportation early and allow extra travel time.",
+      icon: <AlertTriangle className="w-5 h-5" />,
     },
-    {
-      date: "January 15, 2024",
-      title: "Festival Season Travel Guidelines",
-      category: "Events",
-      priority: "medium",
-      description: "Special guidelines for travelers during major festival periods. Advance booking recommended.",
-      details: [
-        "Increased accommodation demand",
-        "Modified transport schedules",
-        "Cultural sensitivity guidelines",
-        "Photography restrictions in some areas",
-      ],
-      impact: "All travelers",
-      status: "active",
-    },
-    {
-      date: "January 12, 2024",
-      title: "New Adventure Activity Safety Standards",
-      category: "Safety",
-      priority: "high",
-      description: "Enhanced safety protocols for adventure sports and high-altitude activities.",
-      details: [
-        "Mandatory safety briefings",
-        "Updated equipment standards",
-        "Certified guide requirements",
-        "Emergency response protocols",
-      ],
-      impact: "Adventure travelers",
-      status: "active",
-    },
-  ]
+  ];
 
-  const travelAdvisories = [
+  const safetyGuidelines = [
     {
-      region: "High Altitude Areas (Above 3500m)",
-      level: "Caution",
-      description: "Take proper acclimatization measures and carry altitude sickness medication",
-      recommendations: [
-        "Gradual ascent recommended",
-        "Stay hydrated",
-        "Recognize altitude sickness symptoms",
-        "Carry emergency medication",
-      ],
-      validUntil: "Ongoing",
-    },
-    {
-      region: "Remote Trekking Routes",
-      level: "Advisory",
-      description: "Inform local authorities of your trekking plans and carry emergency communication devices",
-      recommendations: [
-        "Register with local authorities",
-        "Carry satellite communication device",
-        "Travel with experienced guides",
-        "Share itinerary with contacts",
-      ],
-      validUntil: "Ongoing",
-    },
-    {
-      region: "Monsoon-Affected Areas",
-      level: "Seasonal",
-      description: "Exercise caution during monsoon season (June-September) due to landslide risks",
-      recommendations: [
-        "Check weather forecasts",
-        "Avoid steep terrain during heavy rain",
-        "Use reliable transportation",
-        "Have flexible itinerary",
-      ],
-      validUntil: "September 2024",
-    },
-  ]
-
-  const healthUpdates = [
-    {
-      title: "Vaccination Recommendations Updated",
-      date: "January 10, 2024",
-      description: "Latest health guidelines for international travelers",
-      recommendations: [
-        "Hepatitis A & B vaccination recommended",
-        "Typhoid vaccination for rural areas",
-        "Japanese Encephalitis for extended stays",
-        "Routine vaccinations up to date",
+      title: "Mountain Safety",
+      guidelines: [
+        "Always inform someone about your trekking plans",
+        "Carry emergency communication devices",
+        "Check weather conditions before departure",
+        "Travel with experienced guides in remote areas",
       ],
     },
     {
-      title: "High Altitude Health Guidelines",
-      date: "January 8, 2024",
-      description: "Important information for travelers going above 2500m",
-      recommendations: [
-        "Gradual ascent above 2500m",
-        "Recognize AMS symptoms",
-        "Carry Diamox if recommended",
-        "Descend if symptoms worsen",
+      title: "Cultural Respect",
+      guidelines: [
+        "Dress modestly when visiting religious sites",
+        "Ask permission before photographing people",
+        "Remove shoes when entering temples",
+        "Respect local customs and traditions",
       ],
     },
     {
-      title: "Water Safety Recommendations",
-      date: "January 5, 2024",
-      description: "Guidelines for safe drinking water during travel",
-      recommendations: [
-        "Use bottled or purified water",
-        "Avoid ice in drinks",
-        "Use water purification tablets",
-        "Boil water for 3+ minutes if needed",
+      title: "Health Precautions",
+      guidelines: [
+        "Drink bottled or purified water",
+        "Carry basic first aid supplies",
+        "Be aware of altitude sickness symptoms",
+        "Have travel insurance with medical coverage",
       ],
     },
-  ]
-
-  const transportUpdates = [
-    {
-      mode: "Domestic Flights",
-      status: "Normal Operations",
-      updates: [
-        "Regular schedules maintained",
-        "Weather-dependent cancellations possible",
-        "Book in advance during peak season",
-        "Flexible booking policies available",
-      ],
-      lastUpdated: "January 20, 2024",
-    },
-    {
-      mode: "Road Transport",
-      status: "Seasonal Restrictions",
-      updates: [
-        "Some high-altitude roads closed in winter",
-        "Landslide risks during monsoon",
-        "4WD vehicles recommended for remote areas",
-        "Check road conditions before travel",
-      ],
-      lastUpdated: "January 18, 2024",
-    },
-    {
-      mode: "Local Transport",
-      status: "Normal Operations",
-      updates: [
-        "Bus services running regularly",
-        "Taxi services available in major cities",
-        "Ride-sharing apps operational",
-        "Negotiate fares in advance",
-      ],
-      lastUpdated: "January 15, 2024",
-    },
-  ]
+  ];
 
   const emergencyContacts = [
+    { service: "Tourist Police", number: "+1-555-TOURIST", available: "24/7" },
     {
-      service: "Tourist Police",
-      number: "+977-1-4247041",
-      description: "24/7 assistance for tourists",
-      languages: ["English", "Hindi", "Local languages"],
+      service: "Medical Emergency",
+      number: "+1-555-MEDICAL",
+      available: "24/7",
     },
     {
-      service: "Emergency Medical",
-      number: "102",
-      description: "Medical emergency services",
-      languages: ["Local languages", "Basic English"],
-    },
-    {
-      service: "Tourist Helpline",
-      number: "+977-1-4247041",
-      description: "General tourist assistance and information",
-      languages: ["English", "Hindi", "Local languages"],
+      service: "Tourist Information",
+      number: "+1-555-INFO",
+      available: "8 AM - 8 PM",
     },
     {
       service: "Embassy Services",
-      number: "Contact your embassy",
-      description: "Consular services for foreign nationals",
-      languages: ["Various"],
+      number: "+1-555-EMBASSY",
+      available: "9 AM - 5 PM",
     },
-  ]
+  ];
+
+  const getUpdateStyle = (type: string, priority: string) => {
+    const baseStyle = "p-4 rounded-lg border-l-4";
+
+    if (type === "advisory" && priority === "high") {
+      return `${baseStyle} bg-red-50 border-red-500 text-red-800`;
+    } else if (type === "advisory") {
+      return `${baseStyle} bg-yellow-50 border-yellow-500 text-yellow-800`;
+    } else if (type === "success") {
+      return `${baseStyle} bg-green-50 border-green-500 text-green-800`;
+    } else {
+      return `${baseStyle} bg-blue-50 border-blue-500 text-blue-800`;
+    }
+  };
+
+  const getIconColor = (type: string, priority: string) => {
+    if (type === "advisory" && priority === "high") return "text-red-600";
+    if (type === "advisory") return "text-yellow-600";
+    if (type === "success") return "text-green-600";
+    return "text-blue-600";
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <div className="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center">
-                <MapPin className="w-6 h-6 text-white" />
-              </div>
-              <span className="ml-3 text-xl font-bold text-slate-800">TourismHub</span>
-            </Link>
-
-            <div className="hidden lg:flex space-x-8">
-              <Link href="/" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Home
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-4">
+              <Link href="/">
+                <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                  <ArrowLeft className="w-5 h-5 text-slate-600" />
+                </button>
               </Link>
-              <Link href="/places-to-go" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Places to Go
-              </Link>
-              <Link href="/things-to-do" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Things to Do
-              </Link>
-              <Link
-                href="/festivals-events"
-                className="text-slate-700 hover:text-sky-600 transition-colors font-medium"
-              >
-                Festivals & Events
-              </Link>
-              <Link href="/plan-your-trip" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Plan Your Trip
-              </Link>
-              <Link href="/travel-updates" className="text-sky-600 font-medium">
+              <h1 className="text-2xl font-bold text-slate-800">
                 Travel Updates
-              </Link>
+              </h1>
             </div>
+            <Link href="/">
+              <div className="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center">
+                <MapIcon className="w-4 h-4 text-white" />
+              </div>
+            </Link>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-red-400 via-red-500 to-red-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-br from-red-400 to-red-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            className="text-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Travel Updates</h1>
-            <p className="text-xl md:text-2xl text-red-100 mb-8 max-w-3xl mx-auto">
-              Stay informed with the latest travel advisories, safety updates, and important information
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Stay Informed & Travel Safe
+            </h2>
+            <p className="text-xl text-red-100 max-w-3xl mx-auto">
+              Get the latest travel advisories, safety updates, and important
+              information for your journey
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Latest Updates */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Latest Updates</h2>
-            <p className="text-xl text-slate-600">Recent announcements and important information</p>
-          </motion.div>
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Latest Updates */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h3 className="text-3xl font-bold text-slate-800 mb-8 text-center">
+            Latest Updates
+          </h3>
           <div className="space-y-6">
-            {latestUpdates.map((update, index) => (
+            {updates.map((update, index) => (
               <motion.div
-                key={index}
-                className="bg-white border border-slate-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+                key={update.id}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden"
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-4">
-                    <div
-                      className={`p-2 rounded-lg ${
-                        update.priority === "high"
-                          ? "bg-red-100"
-                          : update.priority === "medium"
-                            ? "bg-yellow-100"
-                            : "bg-blue-100"
-                      }`}
-                    >
-                      {update.priority === "high" ? (
-                        <AlertTriangle
-                          className={`w-5 h-5 ${update.priority === "high" ? "text-red-600" : "text-yellow-600"}`}
-                        />
-                      ) : (
-                        <Info
-                          className={`w-5 h-5 ${update.priority === "medium" ? "text-yellow-600" : "text-blue-600"}`}
-                        />
-                      )}
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-slate-800">{update.title}</h3>
-                      <div className="flex items-center space-x-4 text-sm text-slate-500 mt-1">
-                        <div className="flex items-center space-x-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{update.date}</span>
-                        </div>
-                        <span className="px-2 py-1 bg-slate-100 rounded-full text-xs font-medium">
-                          {update.category}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      update.priority === "high"
-                        ? "bg-red-100 text-red-800"
-                        : update.priority === "medium"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-blue-100 text-blue-800"
-                    }`}
-                  >
-                    {update.priority} priority
-                  </div>
-                </div>
-
-                <p className="text-slate-600 mb-4">{update.description}</p>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold text-slate-800 mb-2">Key Details:</h4>
-                    <ul className="space-y-1">
-                      {update.details.map((detail, idx) => (
-                        <li key={idx} className="flex items-center space-x-2 text-sm text-slate-600">
-                          <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span>{detail}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <div className="flex items-center space-x-4 text-sm">
-                      <div className="flex items-center space-x-1">
-                        <Users className="w-4 h-4 text-slate-500" />
-                        <span className="text-slate-600">Affects: {update.impact}</span>
-                      </div>
+                <div className="p-6">
+                  <div className={getUpdateStyle(update.type, update.priority)}>
+                    <div className="flex items-start space-x-3">
                       <div
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          update.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-                        }`}
+                        className={`flex-shrink-0 ${getIconColor(
+                          update.type,
+                          update.priority
+                        )}`}
                       >
-                        {update.status}
+                        {update.icon}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-lg font-bold">{update.title}</h4>
+                          <span className="text-xs uppercase font-medium px-2 py-1 rounded-full bg-white/50">
+                            {update.priority} priority
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-4 text-sm mb-3">
+                          <div className="flex items-center space-x-1">
+                            <Calendar className="w-4 h-4" />
+                            <span>{update.date}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <MapPin className="w-4 h-4" />
+                            <span>{update.location}</span>
+                          </div>
+                        </div>
+                        <p className="text-sm leading-relaxed">
+                          {update.content}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -367,246 +232,93 @@ export default function TravelUpdates() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
+        </motion.div>
 
-      {/* Travel Advisories */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Travel Advisories</h2>
-            <p className="text-xl text-slate-600">Important safety information by region</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {travelAdvisories.map((advisory, index) => (
+        {/* Safety Guidelines */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          <h3 className="text-3xl font-bold text-slate-800 mb-8 text-center">
+            Safety Guidelines
+          </h3>
+          <div className="grid lg:grid-cols-3 gap-8">
+            {safetyGuidelines.map((category, index) => (
               <motion.div
                 key={index}
-                className="bg-white rounded-2xl p-6 shadow-lg"
+                className="bg-white rounded-2xl shadow-lg p-6"
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-slate-800">{advisory.region}</h3>
-                  <div
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      advisory.level === "Caution"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : advisory.level === "Advisory"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
-                    }`}
-                  >
-                    {advisory.level}
-                  </div>
-                </div>
-
-                <p className="text-slate-600 text-sm mb-4">{advisory.description}</p>
-
-                <div className="mb-4">
-                  <h4 className="font-semibold text-slate-800 mb-2">Recommendations:</h4>
-                  <ul className="space-y-1">
-                    {advisory.recommendations.map((rec, idx) => (
-                      <li key={idx} className="flex items-center space-x-2 text-sm text-slate-600">
-                        <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                        <span>{rec}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="text-sm text-slate-500">
-                  <strong>Valid until:</strong> {advisory.validUntil}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Health Updates */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Health & Safety Updates</h2>
-            <p className="text-xl text-slate-600">Important health information for travelers</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {healthUpdates.map((health, index) => (
-              <motion.div
-                key={index}
-                className="bg-slate-50 rounded-2xl p-6"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="flex items-center space-x-2 mb-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-slate-500">{health.date}</span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-3">{health.title}</h3>
-                <p className="text-slate-600 text-sm mb-4">{health.description}</p>
-                <ul className="space-y-2">
-                  {health.recommendations.map((rec, idx) => (
-                    <li key={idx} className="flex items-center space-x-2 text-sm text-slate-600">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span>{rec}</span>
-                    </li>
+                <h4 className="text-xl font-bold text-slate-800 mb-4">
+                  {category.title}
+                </h4>
+                <div className="space-y-3">
+                  {category.guidelines.map((guideline, idx) => (
+                    <div key={idx} className="flex items-start space-x-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-slate-600 text-sm">
+                        {guideline}
+                      </span>
+                    </div>
                   ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Transport Updates */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Transportation Updates</h2>
-            <p className="text-xl text-slate-600">Current status of transportation services</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {transportUpdates.map((transport, index) => (
-              <motion.div
-                key={index}
-                className="bg-white rounded-2xl p-6 shadow-lg"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-slate-800">{transport.mode}</h3>
-                  <div
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      transport.status === "Normal Operations"
-                        ? "bg-green-100 text-green-800"
-                        : transport.status === "Seasonal Restrictions"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {transport.status}
-                  </div>
-                </div>
-
-                <ul className="space-y-2 mb-4">
-                  {transport.updates.map((update, idx) => (
-                    <li key={idx} className="flex items-center space-x-2 text-sm text-slate-600">
-                      <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                      <span>{update}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex items-center space-x-1 text-sm text-slate-500">
-                  <Clock className="w-4 h-4" />
-                  <span>Updated: {transport.lastUpdated}</span>
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
+        </motion.div>
 
-      {/* Emergency Contacts */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Emergency Contacts</h2>
-            <p className="text-xl text-slate-600">Important numbers to keep handy during your trip</p>
-          </motion.div>
-
+        {/* Emergency Contacts */}
+        <motion.div
+          className="bg-white rounded-2xl shadow-lg p-8"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
+          <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">
+            Emergency Contacts
+          </h3>
           <div className="grid md:grid-cols-2 gap-6">
             {emergencyContacts.map((contact, index) => (
               <motion.div
                 key={index}
-                className="bg-red-50 border border-red-200 rounded-2xl p-6"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                className="p-4 bg-slate-50 rounded-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <h3 className="text-lg font-bold text-slate-800">{contact.service}</h3>
-                </div>
-                <div className="text-2xl font-bold text-red-600 mb-2">{contact.number}</div>
-                <p className="text-slate-600 text-sm mb-3">{contact.description}</p>
-                <div className="text-sm text-slate-500">
-                  <strong>Languages:</strong> {contact.languages.join(", ")}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-slate-800">
+                      {contact.service}
+                    </h4>
+                    <p className="text-lg font-bold text-red-600">
+                      {contact.number}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-slate-600">Available</p>
+                    <p className="text-sm font-medium text-slate-800">
+                      {contact.available}
+                    </p>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Call to Action */}
-      <section className="py-16 bg-red-500">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Stay Informed, Travel Safe</h2>
-            <p className="text-xl text-red-100 mb-8">
-              Subscribe to our updates for the latest travel information and safety advisories
+          <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p className="text-sm text-red-800">
+              <strong>Important:</strong> In case of immediate emergency,
+              contact local emergency services (911) first, then notify the
+              relevant tourist services listed above.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/plan-your-trip">
-                <motion.button
-                  className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-slate-100 transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Plan Your Trip
-                </motion.button>
-              </Link>
-              <motion.button
-                className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-red-600 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Subscribe to Updates
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </motion.div>
+      </div>
     </div>
-  )
+  );
 }

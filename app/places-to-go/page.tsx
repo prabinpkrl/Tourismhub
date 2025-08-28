@@ -1,329 +1,352 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import Link from "next/link"
-import { ArrowRight, MapPin, Star, Clock, Users } from "lucide-react"
+import { motion } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ArrowLeft,
+  Star,
+  MapPin,
+  Clock,
+  Users,
+  Camera,
+  MapIcon,
+} from "lucide-react";
 
-export default function PlacesToGo() {
+export default function PlacesToGoPage() {
   const regions = [
     {
-      name: "Mountain Region",
-      description: "Explore towering peaks, pristine valleys, and ancient mountain cultures",
-      image: "mountain region with snow peaks and valleys",
+      id: 1,
+      title: "Mountain Region",
+      description:
+        "Explore towering peaks, pristine valleys, and breathtaking alpine landscapes",
+      image: "majestic mountain peaks with snow and hiking trails",
       destinations: 15,
-      featured: true,
+      rating: 4.8,
+      difficulty: "Moderate to Challenging",
     },
     {
-      name: "Cultural Heritage Sites",
-      description: "Discover ancient temples, palaces, and UNESCO World Heritage sites",
-      image: "ancient cultural heritage temples and monuments",
+      id: 2,
+      title: "Cultural Heritage Sites",
+      description:
+        "Discover ancient temples, historic monuments, and traditional architecture",
+      image: "ancient temples and cultural heritage sites",
       destinations: 12,
-      featured: true,
+      rating: 4.9,
+      difficulty: "Easy to Moderate",
     },
     {
-      name: "National Parks",
-      description: "Experience diverse wildlife and pristine natural environments",
+      id: 3,
+      title: "National Parks",
+      description:
+        "Experience diverse wildlife, pristine forests, and natural wonders",
       image: "national park with wildlife and forest landscapes",
       destinations: 8,
-      featured: false,
+      rating: 4.7,
+      difficulty: "Easy to Moderate",
     },
     {
-      name: "Lakes & Rivers",
-      description: "Serene lakes and flowing rivers perfect for relaxation and adventure",
-      image: "beautiful lakes and rivers with scenic surroundings",
+      id: 4,
+      title: "Lakes & Rivers",
+      description:
+        "Enjoy serene waters, water sports, and scenic riverside experiences",
+      image: "pristine lakes and rivers with scenic views",
       destinations: 10,
-      featured: false,
+      rating: 4.6,
+      difficulty: "Easy",
     },
-  ]
+  ];
 
   const featuredDestinations = [
     {
-      name: "Everest Base Camp",
-      region: "Mountain Region",
-      description: "The ultimate trekking destination offering breathtaking views of the world's highest peak",
-      image: "everest base camp with mountain views",
+      id: 1,
+      title: "Everest Base Camp",
+      location: "Mountain Region",
+      duration: "14 days",
+      price: 1299,
       rating: 4.9,
-      duration: "12-16 days",
-      difficulty: "Challenging",
-      highlights: ["World's highest peak views", "Sherpa culture", "Stunning glaciers"],
+      reviews: 234,
+      image: "everest base camp with mountain views",
+      highlights: [
+        "World's highest peak",
+        "Sherpa culture",
+        "Stunning views",
+        "Adventure of a lifetime",
+      ],
     },
     {
-      name: "Annapurna Circuit",
-      region: "Mountain Region",
-      description: "Classic trek through diverse landscapes and traditional mountain villages",
-      image: "annapurna circuit trek with mountain villages",
+      id: 2,
+      title: "Ancient Temple Complex",
+      location: "Cultural Heritage",
+      duration: "3 days",
+      price: 299,
       rating: 4.8,
-      duration: "15-20 days",
-      difficulty: "Moderate to Challenging",
-      highlights: ["Diverse landscapes", "Cultural villages", "Thorong La Pass"],
+      reviews: 189,
+      image: "ancient temple complex with intricate architecture",
+      highlights: [
+        "UNESCO World Heritage",
+        "Ancient architecture",
+        "Spiritual experience",
+        "Cultural immersion",
+      ],
     },
     {
-      name: "Kathmandu Valley",
-      region: "Cultural Heritage",
-      description: "Historic valley with ancient temples, palaces, and vibrant local culture",
-      image: "kathmandu valley with ancient temples and architecture",
+      id: 3,
+      title: "Wildlife Safari Park",
+      location: "National Parks",
+      duration: "5 days",
+      price: 599,
       rating: 4.7,
-      duration: "3-5 days",
-      difficulty: "Easy",
-      highlights: ["UNESCO sites", "Ancient architecture", "Local markets"],
+      reviews: 156,
+      image: "wildlife safari with elephants and nature",
+      highlights: [
+        "Rare wildlife",
+        "Expert guides",
+        "Photography tours",
+        "Conservation efforts",
+      ],
     },
-    {
-      name: "Chitwan National Park",
-      region: "National Parks",
-      description: "Premier wildlife destination with rhinos, tigers, and diverse bird species",
-      image: "chitwan national park with wildlife and jungle",
-      rating: 4.6,
-      duration: "2-4 days",
-      difficulty: "Easy",
-      highlights: ["Wildlife safari", "Jungle activities", "Cultural programs"],
-    },
-    {
-      name: "Pokhara Valley",
-      region: "Lakes & Rivers",
-      description: "Scenic lakeside city with stunning mountain reflections and adventure activities",
-      image: "pokhara valley with lake and mountain reflections",
-      rating: 4.8,
-      duration: "3-7 days",
-      difficulty: "Easy to Moderate",
-      highlights: ["Phewa Lake", "Mountain views", "Adventure sports"],
-    },
-    {
-      name: "Lumbini",
-      region: "Cultural Heritage",
-      description: "Birthplace of Buddha and important pilgrimage site with ancient monasteries",
-      image: "lumbini buddhist temples and monasteries",
-      rating: 4.5,
-      duration: "1-2 days",
-      difficulty: "Easy",
-      highlights: ["Buddha's birthplace", "Ancient monasteries", "Peace pagoda"],
-    },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Navigation - Same as homepage */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <div className="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center">
-                <MapPin className="w-6 h-6 text-white" />
-              </div>
-              <span className="ml-3 text-xl font-bold text-slate-800">TourismHub</span>
-            </Link>
-
-            <div className="hidden lg:flex space-x-8">
-              <Link href="/" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Home
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-4">
+              <Link href="/">
+                <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                  <ArrowLeft className="w-5 h-5 text-slate-600" />
+                </button>
               </Link>
-              <Link href="/places-to-go" className="text-sky-600 font-medium">
+              <h1 className="text-2xl font-bold text-slate-800">
                 Places to Go
-              </Link>
-              <Link href="/things-to-do" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Things to Do
-              </Link>
-              <Link
-                href="/festivals-events"
-                className="text-slate-700 hover:text-sky-600 transition-colors font-medium"
-              >
-                Festivals & Events
-              </Link>
-              <Link href="/plan-your-trip" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Plan Your Trip
-              </Link>
-              <Link href="/travel-updates" className="text-slate-700 hover:text-sky-600 transition-colors font-medium">
-                Travel Updates
-              </Link>
+              </h1>
             </div>
+            <Link href="/">
+              <div className="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center">
+                <MapIcon className="w-4 h-4 text-white" />
+              </div>
+            </Link>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-sky-400 via-sky-500 to-sky-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-br from-sky-400 to-sky-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            className="text-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Places to Go</h1>
-            <p className="text-xl md:text-2xl text-sky-100 mb-8 max-w-3xl mx-auto">
-              Discover incredible destinations from towering mountain peaks to ancient cultural sites
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Discover Incredible Destinations
+            </h2>
+            <p className="text-xl text-sky-100 max-w-3xl mx-auto">
+              From towering mountain peaks to ancient cultural sites, explore
+              the world's most breathtaking destinations
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Regions Overview */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Explore by Region</h2>
-            <p className="text-xl text-slate-600">Choose your preferred type of destination</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Regions Grid */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h3 className="text-3xl font-bold text-slate-800 mb-8 text-center">
+            Explore by Region
+          </h3>
+          <div className="grid md:grid-cols-2 gap-8">
             {regions.map((region, index) => (
               <motion.div
-                key={index}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer"
+                key={region.id}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
               >
-                <div className="relative h-48">
+                <div className="relative h-64">
                   <Image
-                    src={`/placeholder.svg?height=200&width=300&query=${region.image}`}
-                    alt={region.name}
+                    src={`/abstract-geometric-shapes.png?height=300&width=500&query=${region.image}`}
+                    alt={region.title}
                     fill
                     className="object-cover"
                   />
-                  {region.featured && (
-                    <div className="absolute top-4 left-4 bg-sky-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      Featured
+                  <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span className="text-sm font-medium">
+                        {region.rating}
+                      </span>
                     </div>
-                  )}
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">{region.name}</h3>
-                  <p className="text-slate-600 text-sm mb-4">{region.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sky-600 font-semibold">{region.destinations} destinations</span>
-                    <ArrowRight className="w-4 h-4 text-sky-600" />
                   </div>
+                </div>
+
+                <div className="p-6">
+                  <h4 className="text-2xl font-bold text-slate-800 mb-3">
+                    {region.title}
+                  </h4>
+                  <p className="text-slate-600 mb-4">{region.description}</p>
+
+                  <div className="flex items-center justify-between text-sm text-slate-600 mb-4">
+                    <div className="flex items-center space-x-1">
+                      <MapPin className="w-4 h-4" />
+                      <span>{region.destinations} destinations</span>
+                    </div>
+                    <span className="bg-slate-100 px-2 py-1 rounded">
+                      {region.difficulty}
+                    </span>
+                  </div>
+
+                  <button className="w-full bg-sky-500 text-white py-3 rounded-lg font-semibold hover:bg-sky-600 transition-colors">
+                    Explore Region
+                  </button>
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
+        </motion.div>
 
-      {/* Featured Destinations */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Featured Destinations</h2>
-            <p className="text-xl text-slate-600">Must-visit places that offer extraordinary experiences</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Featured Destinations */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          <h3 className="text-3xl font-bold text-slate-800 mb-8 text-center">
+            Featured Destinations
+          </h3>
+          <div className="grid lg:grid-cols-3 gap-8">
             {featuredDestinations.map((destination, index) => (
               <motion.div
-                key={index}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all"
+                key={destination.id}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
               >
-                <div className="relative h-56">
+                <div className="relative h-48">
                   <Image
-                    src={`/placeholder.svg?height=240&width=400&query=${destination.image}`}
-                    alt={destination.name}
+                    src={`/abstract-geometric-shapes.png?height=200&width=300&query=${destination.image}`}
+                    alt={destination.title}
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg flex items-center space-x-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                    <span className="text-sm font-semibold">{destination.rating}</span>
+                  <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <span className="text-sm font-medium">
+                        {destination.rating}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-bold text-slate-800">{destination.name}</h3>
-                    <span className="text-sm text-sky-600 font-medium">{destination.region}</span>
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className="text-xl font-bold text-slate-800">
+                      {destination.title}
+                    </h4>
+                    <span className="text-2xl font-bold text-sky-600">
+                      ${destination.price}
+                    </span>
                   </div>
 
-                  <p className="text-slate-600 text-sm mb-4">{destination.description}</p>
-
-                  <div className="flex items-center space-x-4 mb-4 text-sm text-slate-500">
+                  <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
+                    <div className="flex items-center space-x-1">
+                      <MapPin className="w-4 h-4" />
+                      <span>{destination.location}</span>
+                    </div>
                     <div className="flex items-center space-x-1">
                       <Clock className="w-4 h-4" />
                       <span>{destination.duration}</span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
-                      <span>{destination.difficulty}</span>
+                      <span>{destination.reviews} reviews</span>
                     </div>
                   </div>
 
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-slate-800 mb-2">Highlights:</h4>
-                    <ul className="text-sm text-slate-600 space-y-1">
-                      {destination.highlights.map((highlight, idx) => (
-                        <li key={idx} className="flex items-center space-x-2">
-                          <div className="w-1.5 h-1.5 bg-sky-500 rounded-full"></div>
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="space-y-2 mb-4">
+                    {destination.highlights.map((highlight, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center space-x-2 text-sm text-slate-600"
+                      >
+                        <div className="w-1.5 h-1.5 bg-sky-500 rounded-full"></div>
+                        <span>{highlight}</span>
+                      </div>
+                    ))}
                   </div>
 
                   <button className="w-full bg-sky-500 text-white py-3 rounded-lg font-semibold hover:bg-sky-600 transition-colors">
-                    Learn More
+                    View Details
                   </button>
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
+        </motion.div>
 
-      {/* Call to Action */}
-      <section className="py-16 bg-sky-500">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Start Your Adventure?</h2>
-            <p className="text-xl text-sky-100 mb-8">
-              Get personalized recommendations and start planning your perfect trip
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/plan-your-trip">
-                <motion.button
-                  className="bg-white text-sky-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-slate-100 transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Plan Your Trip
-                </motion.button>
-              </Link>
-              <Link href="/things-to-do">
-                <motion.button
-                  className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-sky-600 transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Explore Activities
-                </motion.button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+        {/* Travel Tips */}
+        <motion.div
+          className="mt-16 bg-white rounded-2xl shadow-lg p-8"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
+          <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">
+            Travel Tips
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: <Camera className="w-6 h-6" />,
+                title: "Best Photography Times",
+                tip: "Golden hour (sunrise/sunset) provides the most stunning lighting for landscape photography.",
+              },
+              {
+                icon: <Clock className="w-6 h-6" />,
+                title: "Seasonal Planning",
+                tip: "Visit mountain regions in spring/autumn for clear weather and comfortable temperatures.",
+              },
+              {
+                icon: <Users className="w-6 h-6" />,
+                title: "Local Guides",
+                tip: "Hire local guides for cultural sites to gain deeper insights into history and traditions.",
+              },
+              {
+                icon: <MapPin className="w-6 h-6" />,
+                title: "Off-Peak Benefits",
+                tip: "Travel during shoulder seasons for fewer crowds and better accommodation rates.",
+              },
+            ].map((tip, index) => (
+              <motion.div
+                key={index}
+                className="text-center p-4 bg-slate-50 rounded-xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <div className="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center mx-auto mb-3 text-sky-600">
+                  {tip.icon}
+                </div>
+                <h4 className="font-semibold text-slate-800 mb-2">
+                  {tip.title}
+                </h4>
+                <p className="text-sm text-slate-600">{tip.tip}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
     </div>
-  )
+  );
 }
