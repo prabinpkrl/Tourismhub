@@ -277,7 +277,7 @@ export default function BookingPage() {
                     <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
                       <div className="flex items-center space-x-1">
                         <Clock className="w-4 h-4" />
-                        <span>{item.duration}</span>
+                        <span>{(item as any).duration}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Users className="w-4 h-4" />
@@ -289,7 +289,7 @@ export default function BookingPage() {
                   {activeTab === "accommodation" && (
                     <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
                       <span className="bg-slate-100 px-2 py-1 rounded">
-                        {item.type}
+                        {(item as any).type}
                       </span>
                       <div className="flex items-center space-x-1">
                         <Users className="w-4 h-4" />
@@ -301,7 +301,7 @@ export default function BookingPage() {
                   {activeTab === "transport" && (
                     <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
                       <span className="bg-slate-100 px-2 py-1 rounded">
-                        {item.type}
+                        {(item as any).type}
                       </span>
                       <div className="flex items-center space-x-1">
                         <Users className="w-4 h-4" />
