@@ -15,148 +15,33 @@ import {
   Mountain,
   MapIcon,
 } from "lucide-react";
+import { useApi } from "@/hooks/useApi";
+import { bookingsApi } from "@/lib/api";
 
 export default function BookingPage() {
   const [activeTab, setActiveTab] = useState("tours");
 
-  const tours = [
-    {
-      id: 1,
-      title: "Mountain Peak Adventure",
-      duration: "3 Days",
-      price: 299,
-      rating: 4.8,
-      reviews: 124,
-      image: "mountain hiking adventure with scenic views",
-      features: [
-        "Professional Guide",
-        "Equipment Included",
-        "Meals Provided",
-        "Transportation",
-      ],
-    },
-    {
-      id: 2,
-      title: "Cultural Heritage Tour",
-      duration: "2 Days",
-      price: 199,
-      rating: 4.9,
-      reviews: 89,
-      image: "ancient temples and cultural sites tour",
-      features: [
-        "Expert Guide",
-        "Museum Entries",
-        "Traditional Lunch",
-        "Photo Opportunities",
-      ],
-    },
-    {
-      id: 3,
-      title: "Wildlife Safari Experience",
-      duration: "4 Days",
-      price: 449,
-      rating: 4.7,
-      reviews: 156,
-      image: "wildlife safari with elephants and nature",
-      features: [
-        "Safari Vehicle",
-        "Wildlife Expert",
-        "All Meals",
-        "Accommodation",
-      ],
-    },
-  ];
+  // Fetch booking services from API
+  const { data: servicesData, loading: servicesLoading } = useApi(
+    () => bookingsApi.getServices(),
+    []
+  );
 
-  const accommodations = [
-    {
-      id: 1,
-      title: "Mountain View Resort",
-      type: "Luxury Resort",
-      price: 150,
-      rating: 4.9,
-      reviews: 234,
-      image: "luxury mountain resort with scenic views",
-      features: ["Mountain Views", "Spa Services", "Restaurant", "Free WiFi"],
-    },
-    {
-      id: 2,
-      title: "Cultural Heritage Hotel",
-      type: "Boutique Hotel",
-      price: 89,
-      rating: 4.6,
-      reviews: 167,
-      image: "traditional boutique hotel with cultural design",
-      features: [
-        "Traditional Design",
-        "Cultural Activities",
-        "Local Cuisine",
-        "City Center",
-      ],
-    },
-    {
-      id: 3,
-      title: "Eco Lodge Retreat",
-      type: "Eco Lodge",
-      price: 120,
-      rating: 4.8,
-      reviews: 98,
-      image: "eco-friendly lodge in natural setting",
-      features: [
-        "Eco-Friendly",
-        "Nature Walks",
-        "Organic Meals",
-        "Peaceful Setting",
-      ],
-    },
-  ];
-
-  const transport = [
-    {
-      id: 1,
-      title: "Private Car with Driver",
-      type: "Private Transport",
-      price: 80,
-      rating: 4.7,
-      reviews: 89,
-      image: "comfortable private car for tourism",
-      features: [
-        "Professional Driver",
-        "AC Vehicle",
-        "Flexible Schedule",
-        "Local Knowledge",
-      ],
-    },
-    {
-      id: 2,
-      title: "Group Bus Tour",
-      type: "Group Transport",
-      price: 25,
-      rating: 4.4,
-      reviews: 156,
-      image: "comfortable tour bus for group travel",
-      features: [
-        "Comfortable Seating",
-        "Tour Guide",
-        "Fixed Schedule",
-        "Cost Effective",
-      ],
-    },
-    {
-      id: 3,
-      title: "Helicopter Tour",
-      type: "Premium Transport",
-      price: 299,
-      rating: 5.0,
-      reviews: 45,
-      image: "helicopter tour over scenic landscapes",
-      features: [
-        "Aerial Views",
-        "Professional Pilot",
-        "Photo Opportunities",
-        "Luxury Experience",
-      ],
-    },
-  ];
+  // Extract services by type
+  const allServices = servicesData?.data || {
+    tours: [],
+    accommodation: [],
+    transport: [],
+  };
+  const tours = Array.isArray(allServices)
+    ? allServices
+    : allServices.tours || [];
+  const accommodations = Array.isArray(allServices)
+    ? allServices
+    : allServices.accommodation || [];
+  const transport = Array.isArray(allServices)
+    ? allServices
+    : allServices.transport || [];
 
   const getTabData = () => {
     switch (activeTab) {
@@ -240,94 +125,108 @@ export default function BookingPage() {
 
           {/* Booking Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {getTabData().map((item, index) => (
-              <motion.div
-                key={item.id}
-                className="border border-slate-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <div className="relative h-48">
-                  <Image
-                    src={`/abstract-geometric-shapes.png?height=200&width=300&query=${item.image}`}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium">{item.rating}</span>
+            {servicesLoading
+              ? Array.from({ length: 6 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="border border-slate-200 rounded-xl overflow-hidden"
+                  >
+                    <div className="h-48 bg-slate-200 animate-pulse"></div>
+                    <div className="p-6">
+                      <div className="h-6 bg-slate-200 animate-pulse rounded mb-2"></div>
+                      <div className="h-4 bg-slate-200 animate-pulse rounded mb-4"></div>
+                      <div className="space-y-2 mb-4">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="h-3 bg-slate-200 animate-pulse rounded"
+                          ></div>
+                        ))}
+                      </div>
+                      <div className="h-12 bg-slate-200 animate-pulse rounded"></div>
                     </div>
                   </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-bold text-slate-800 text-lg">
-                      {item.title}
-                    </h3>
-                    <span className="text-2xl font-bold text-sky-600">
-                      ${item.price}
-                    </span>
-                  </div>
-
-                  {activeTab === "tours" && (
-                    <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
-                      <div className="flex items-center space-x-1">
-                        <Clock className="w-4 h-4" />
-                        <span>{(item as any).duration}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Users className="w-4 h-4" />
-                        <span>{item.reviews} reviews</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "accommodation" && (
-                    <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
-                      <span className="bg-slate-100 px-2 py-1 rounded">
-                        {(item as any).type}
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        <Users className="w-4 h-4" />
-                        <span>{item.reviews} reviews</span>
+                ))
+              : getTabData().map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    className="border border-slate-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <div className="relative h-48">
+                      <Image
+                        src={`/abstract-geometric-shapes.png?height=200&width=300&query=${item.image}`}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="text-sm font-medium">
+                            {item.rating}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  )}
 
-                  {activeTab === "transport" && (
-                    <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
-                      <span className="bg-slate-100 px-2 py-1 rounded">
-                        {(item as any).type}
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        <Users className="w-4 h-4" />
-                        <span>{item.reviews} reviews</span>
+                    <div className="p-6">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-bold text-slate-800 text-lg">
+                          {item.title}
+                        </h3>
+                        <span className="text-2xl font-bold text-sky-600">
+                          ${item.price}
+                        </span>
                       </div>
+
+                      {activeTab === "tours" && item.duration && (
+                        <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-4 h-4" />
+                            <span>{item.duration}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Users className="w-4 h-4" />
+                            <span>{item.reviews} reviews</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {(activeTab === "accommodation" ||
+                        activeTab === "transport") &&
+                        item.type && (
+                          <div className="flex items-center space-x-4 text-sm text-slate-600 mb-4">
+                            <span className="bg-slate-100 px-2 py-1 rounded">
+                              {item.type}
+                            </span>
+                            <div className="flex items-center space-x-1">
+                              <Users className="w-4 h-4" />
+                              <span>{item.reviews} reviews</span>
+                            </div>
+                          </div>
+                        )}
+
+                      <div className="space-y-2 mb-4">
+                        {item.features.map((feature, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center space-x-2 text-sm text-slate-600"
+                          >
+                            <div className="w-1.5 h-1.5 bg-sky-500 rounded-full"></div>
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button className="w-full bg-sky-500 text-white py-3 rounded-lg font-semibold hover:bg-sky-600 transition-colors">
+                        Book Now
+                      </button>
                     </div>
-                  )}
-
-                  <div className="space-y-2 mb-4">
-                    {item.features.map((feature, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center space-x-2 text-sm text-slate-600"
-                      >
-                        <div className="w-1.5 h-1.5 bg-sky-500 rounded-full"></div>
-                        <span>{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <button className="w-full bg-sky-500 text-white py-3 rounded-lg font-semibold hover:bg-sky-600 transition-colors">
-                    Book Now
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                  </motion.div>
+                ))}
           </div>
         </motion.div>
 

@@ -13,96 +13,41 @@ import {
   Thermometer,
   MapIcon,
 } from "lucide-react";
+import { useApi } from "@/hooks/useApi";
+import { weatherApi } from "@/lib/api";
 
 export default function WeatherPage() {
-  const currentWeather = {
-    location: "Mountain Region",
-    temperature: 22,
-    condition: "Partly Cloudy",
-    humidity: 65,
-    windSpeed: 12,
-    visibility: 10,
-    uvIndex: 6,
+  // Fetch weather data from API
+  const {
+    data: weatherData,
+    loading: weatherLoading,
+    error,
+  } = useApi(() => weatherApi.getCurrent("Mountain Region"), []);
+
+  const currentWeather = weatherData?.data?.current || {
+    temperature: 0,
+    condition: "Loading...",
+    humidity: 0,
+    windSpeed: 0,
+    visibility: 0,
+    uvIndex: 0,
   };
 
-  const forecast = [
-    {
-      day: "Today",
-      high: 22,
-      low: 15,
-      condition: "Partly Cloudy",
-      icon: <Cloud className="w-6 h-6" />,
-    },
-    {
-      day: "Tomorrow",
-      high: 24,
-      low: 16,
-      condition: "Sunny",
-      icon: <Sun className="w-6 h-6" />,
-    },
-    {
-      day: "Wednesday",
-      high: 20,
-      low: 14,
-      condition: "Light Rain",
-      icon: <CloudRain className="w-6 h-6" />,
-    },
-    {
-      day: "Thursday",
-      high: 18,
-      low: 12,
-      condition: "Cloudy",
-      icon: <Cloud className="w-6 h-6" />,
-    },
-    {
-      day: "Friday",
-      high: 25,
-      low: 17,
-      condition: "Sunny",
-      icon: <Sun className="w-6 h-6" />,
-    },
-    {
-      day: "Saturday",
-      high: 23,
-      low: 16,
-      condition: "Partly Cloudy",
-      icon: <Cloud className="w-6 h-6" />,
-    },
-    {
-      day: "Sunday",
-      high: 21,
-      low: 15,
-      condition: "Light Rain",
-      icon: <CloudRain className="w-6 h-6" />,
-    },
-  ];
+  const forecast = weatherData?.data?.forecast || [];
+  const regions = weatherData?.data?.regions || [];
 
-  const regions = [
-    {
-      name: "Mountain Region",
-      temp: 22,
-      condition: "Partly Cloudy",
-      icon: <Cloud className="w-5 h-5" />,
-    },
-    {
-      name: "Coastal Areas",
-      temp: 28,
-      condition: "Sunny",
-      icon: <Sun className="w-5 h-5" />,
-    },
-    {
-      name: "Cultural Sites",
-      temp: 26,
-      condition: "Clear",
-      icon: <Sun className="w-5 h-5" />,
-    },
-    {
-      name: "National Parks",
-      temp: 19,
-      condition: "Light Rain",
-      icon: <CloudRain className="w-5 h-5" />,
-    },
-  ];
+  // Convert forecast data to match the component structure
+  const forecastWithIcons = forecast.map((day) => ({
+    ...day,
+    icon:
+      day.icon === "sun" ? (
+        <Sun className="w-6 h-6" />
+      ) : day.icon === "rain" ? (
+        <CloudRain className="w-6 h-6" />
+      ) : (
+        <Cloud className="w-6 h-6" />
+      ),
+  }));
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -137,67 +82,88 @@ export default function WeatherPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">
-                {currentWeather.location}
-              </h2>
-              <div className="flex items-center space-x-4 mb-4">
-                <span className="text-6xl font-light">
-                  {currentWeather.temperature}°
-                </span>
-                <div>
-                  <Cloud className="w-12 h-12 mb-2" />
-                  <p className="text-sky-100">{currentWeather.condition}</p>
-                </div>
+          {weatherLoading ? (
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="h-8 bg-white/20 animate-pulse rounded mb-4"></div>
+                <div className="h-16 bg-white/20 animate-pulse rounded mb-4"></div>
+                <div className="h-4 bg-white/20 animate-pulse rounded"></div>
               </div>
-              <p className="text-sky-100">
-                Perfect weather for outdoor activities and sightseeing!
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Droplets className="w-5 h-5" />
-                  <span className="text-sm">Humidity</span>
-                </div>
-                <span className="text-2xl font-bold">
-                  {currentWeather.humidity}%
-                </span>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Wind className="w-5 h-5" />
-                  <span className="text-sm">Wind Speed</span>
-                </div>
-                <span className="text-2xl font-bold">
-                  {currentWeather.windSpeed} km/h
-                </span>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Eye className="w-5 h-5" />
-                  <span className="text-sm">Visibility</span>
-                </div>
-                <span className="text-2xl font-bold">
-                  {currentWeather.visibility} km
-                </span>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Thermometer className="w-5 h-5" />
-                  <span className="text-sm">UV Index</span>
-                </div>
-                <span className="text-2xl font-bold">
-                  {currentWeather.uvIndex}
-                </span>
+              <div className="grid grid-cols-2 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-4"
+                  >
+                    <div className="h-4 bg-white/20 animate-pulse rounded mb-2"></div>
+                    <div className="h-6 bg-white/20 animate-pulse rounded"></div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h2 className="text-3xl font-bold mb-2">
+                  {weatherData?.data?.location || "Mountain Region"}
+                </h2>
+                <div className="flex items-center space-x-4 mb-4">
+                  <span className="text-6xl font-light">
+                    {currentWeather.temperature}°
+                  </span>
+                  <div>
+                    <Cloud className="w-12 h-12 mb-2" />
+                    <p className="text-sky-100">{currentWeather.condition}</p>
+                  </div>
+                </div>
+                <p className="text-sky-100">
+                  Perfect weather for outdoor activities and sightseeing!
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Droplets className="w-5 h-5" />
+                    <span className="text-sm">Humidity</span>
+                  </div>
+                  <span className="text-2xl font-bold">
+                    {currentWeather.humidity}%
+                  </span>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Wind className="w-5 h-5" />
+                    <span className="text-sm">Wind Speed</span>
+                  </div>
+                  <span className="text-2xl font-bold">
+                    {currentWeather.windSpeed} km/h
+                  </span>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Eye className="w-5 h-5" />
+                    <span className="text-sm">Visibility</span>
+                  </div>
+                  <span className="text-2xl font-bold">
+                    {currentWeather.visibility} km
+                  </span>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Thermometer className="w-5 h-5" />
+                    <span className="text-sm">UV Index</span>
+                  </div>
+                  <span className="text-2xl font-bold">
+                    {currentWeather.uvIndex}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* 7-Day Forecast */}
@@ -211,7 +177,7 @@ export default function WeatherPage() {
             7-Day Forecast
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-            {forecast.map((day, index) => (
+            {forecastWithIcons.map((day, index) => (
               <motion.div
                 key={index}
                 className="text-center p-4 rounded-xl hover:bg-slate-50 transition-colors"

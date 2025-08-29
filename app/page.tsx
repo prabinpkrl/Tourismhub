@@ -11,8 +11,28 @@ import {
   MapIcon,
   MessageCircle,
 } from "lucide-react";
+import { useApi } from "@/hooks/useApi";
+import {
+  destinationsApi,
+  categoriesApi,
+  type Destination,
+  type Category,
+} from "@/lib/api";
 
 export default function HomePage() {
+  // Fetch featured destinations
+  const { data: featuredDestinationsResponse, loading: destinationsLoading } =
+    useApi(() => destinationsApi.getAll({ featured: true, limit: 3 }), []);
+
+  // Fetch categories
+  const { data: categoriesResponse, loading: categoriesLoading } = useApi(
+    () => categoriesApi.getAll(),
+    []
+  );
+
+  const categories: Category[] = categoriesResponse?.data || [];
+  const destinations: Destination[] = featuredDestinationsResponse?.data || [];
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Navigation */}
@@ -176,56 +196,44 @@ export default function HomePage() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                title: "Places to Go",
-                description: "Discover stunning destinations and hidden gems",
-                icon: "🏔️",
-                href: "/places-to-go",
-                color: "from-sky-400 to-sky-600",
-              },
-              {
-                title: "Things to Do",
-                description: "Adventure activities and cultural experiences",
-                icon: "🎯",
-                href: "/things-to-do",
-                color: "from-emerald-400 to-emerald-600",
-              },
-              {
-                title: "Festivals & Events",
-                description: "Cultural celebrations and traditional festivals",
-                icon: "🎭",
-                href: "/festivals-events",
-                color: "from-purple-400 to-purple-600",
-              },
-              {
-                title: "Plan Your Trip",
-                description: "Essential travel information and guides",
-                icon: "📋",
-                href: "/plan-your-trip",
-                color: "from-orange-400 to-orange-600",
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Link href={item.href}>
+            {categoriesLoading
+              ? // Loading skeleton
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="bg-slate-200 animate-pulse rounded-2xl h-48"
+                  ></div>
+                ))
+              : categories.slice(1, 5).map((category, index) => (
                   <motion.div
-                    className={`bg-gradient-to-br ${item.color} text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all cursor-pointer h-full`}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    whileTap={{ scale: 0.95 }}
+                    key={category._id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
                   >
-                    <div className="text-4xl mb-4">{item.icon}</div>
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                    <p className="text-white/90 text-sm">{item.description}</p>
+                    <Link href={`/places-to-go?category=${category.id}`}>
+                      <motion.div
+                        className={`bg-gradient-to-br ${category.color} text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all cursor-pointer h-full`}
+                        whileHover={{ scale: 1.05, y: -5 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="text-4xl mb-4">{category.icon}</div>
+                        <h3 className="text-xl font-bold mb-2">
+                          {category.label}
+                        </h3>
+                        <p className="text-white/90 text-sm">
+                          {category.description}
+                        </p>
+                        {category.count && (
+                          <p className="text-white/80 text-xs mt-2">
+                            {category.count} destinations
+                          </p>
+                        )}
+                      </motion.div>
+                    </Link>
                   </motion.div>
-                </Link>
-              </motion.div>
-            ))}
+                ))}
           </div>
         </div>
       </section>
@@ -250,61 +258,63 @@ export default function HomePage() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Mountain Peaks",
-                description:
-                  "Experience breathtaking views and challenging adventures in pristine mountain ranges.",
-                image: "majestic snow-capped mountain peaks with hiking trails",
-              },
-              {
-                title: "Cultural Heritage",
-                description:
-                  "Explore ancient temples, historic sites, and rich cultural traditions.",
-                image:
-                  "ancient temple architecture with intricate cultural details",
-              },
-              {
-                title: "Adventure Sports",
-                description:
-                  "Get your adrenaline pumping with exciting outdoor activities and sports.",
-                image:
-                  "adventure sports like paragliding over scenic mountains",
-              },
-            ].map((destination, index) => (
-              <motion.div
-                key={index}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="relative h-48">
-                  <Image
-                    src={`/abstract-geometric-shapes.png?height=200&width=300&query=${destination.image}`}
-                    alt={destination.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-800 mb-3">
-                    {destination.title}
-                  </h3>
-                  <p className="text-slate-600 mb-4">
-                    {destination.description}
-                  </p>
-                  <Link href="/places-to-go">
-                    <button className="text-sky-600 font-semibold flex items-center space-x-1 hover:text-sky-700 transition-colors">
-                      <span>Explore More</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
+            {destinationsLoading
+              ? // Loading skeleton
+                Array.from({ length: 3 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                  >
+                    <div className="h-48 bg-slate-200 animate-pulse"></div>
+                    <div className="p-6">
+                      <div className="h-6 bg-slate-200 animate-pulse rounded mb-2"></div>
+                      <div className="h-4 bg-slate-200 animate-pulse rounded mb-4"></div>
+                      <div className="h-4 bg-slate-200 animate-pulse rounded"></div>
+                    </div>
+                  </div>
+                ))
+              : destinations.map((destination, index) => (
+                  <motion.div
+                    key={destination._id}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -5 }}
+                  >
+                    <div className="relative h-48">
+                      <Image
+                        src={`/abstract-geometric-shapes.png?height=200&width=300&query=${destination.image}`}
+                        alt={destination.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-slate-800 mb-3">
+                        {destination.title}
+                      </h3>
+                      <p className="text-slate-600 mb-4">
+                        {destination.overview}
+                      </p>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-lg font-bold text-sky-600">
+                          {destination.price}
+                        </span>
+                        <span className="text-sm text-slate-500">
+                          {destination.reviews} reviews
+                        </span>
+                      </div>
+                      <Link href={`/places-to-go/${destination._id}`}>
+                        <button className="text-sky-600 font-semibold flex items-center space-x-1 hover:text-sky-700 transition-colors">
+                          <span>Explore More</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </Link>
+                    </div>
+                  </motion.div>
+                ))}
           </div>
         </div>
       </section>

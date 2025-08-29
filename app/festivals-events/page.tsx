@@ -12,82 +12,17 @@ import {
   Star,
   MapIcon,
 } from "lucide-react";
+import { useApi } from "@/hooks/useApi";
+import { festivalsApi } from "@/lib/api";
 
 export default function FestivalsEventsPage() {
-  const upcomingFestivals = [
-    {
-      id: 1,
-      title: "Mountain Heritage Festival",
-      date: "March 15-17, 2024",
-      location: "Mountain Region",
-      duration: "3 days",
-      attendees: "5,000+",
-      rating: 4.9,
-      image: "colorful mountain heritage festival with traditional dancers",
-      description:
-        "Celebrate the rich cultural heritage of mountain communities with traditional music, dance, and local cuisine.",
-      highlights: [
-        "Traditional performances",
-        "Local crafts",
-        "Cultural workshops",
-        "Mountain cuisine",
-      ],
-    },
-    {
-      id: 2,
-      title: "Spring Flower Festival",
-      date: "April 8-10, 2024",
-      location: "Valley Region",
-      duration: "3 days",
-      attendees: "8,000+",
-      rating: 4.8,
-      image: "spring flower festival with blooming gardens",
-      description:
-        "Experience the beauty of spring with flower exhibitions, garden tours, and nature photography workshops.",
-      highlights: [
-        "Flower exhibitions",
-        "Garden tours",
-        "Photography contests",
-        "Nature walks",
-      ],
-    },
-    {
-      id: 3,
-      title: "Cultural Arts Festival",
-      date: "May 20-22, 2024",
-      location: "Cultural District",
-      duration: "3 days",
-      attendees: "12,000+",
-      rating: 4.7,
-      image: "cultural arts festival with traditional performances",
-      description:
-        "Immerse yourself in traditional arts, crafts, and performances showcasing local cultural heritage.",
-      highlights: [
-        "Art exhibitions",
-        "Live performances",
-        "Craft workshops",
-        "Cultural talks",
-      ],
-    },
-    {
-      id: 4,
-      title: "Adventure Sports Festival",
-      date: "June 5-7, 2024",
-      location: "Adventure Park",
-      duration: "3 days",
-      attendees: "6,000+",
-      rating: 4.6,
-      image: "adventure sports festival with outdoor activities",
-      description:
-        "Join thrilling adventure sports competitions and try various outdoor activities with expert guidance.",
-      highlights: [
-        "Sports competitions",
-        "Adventure trials",
-        "Equipment demos",
-        "Safety workshops",
-      ],
-    },
-  ];
+  // Fetch festivals from API
+  const { data: festivalsData, loading: festivalsLoading } = useApi(
+    () => festivalsApi.getAll({ limit: 10 }),
+    []
+  );
+
+  const upcomingFestivals = festivalsData?.data || [];
 
   const monthlyCalendar = [
     { month: "March", events: 3, highlight: "Mountain Heritage Festival" },
@@ -175,74 +110,100 @@ export default function FestivalsEventsPage() {
             Upcoming Festivals
           </h3>
           <div className="grid md:grid-cols-2 gap-8">
-            {upcomingFestivals.map((festival, index) => (
-              <motion.div
-                key={festival.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <div className="relative h-64">
-                  <Image
-                    src={`/abstract-geometric-shapes.png?height=300&width=500&query=${festival.image}`}
-                    alt={festival.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium">
-                        {festival.rating}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h4 className="text-2xl font-bold text-slate-800 mb-3">
-                    {festival.title}
-                  </h4>
-                  <p className="text-slate-600 mb-4">{festival.description}</p>
-
-                  <div className="grid grid-cols-2 gap-4 text-sm text-slate-600 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4" />
-                      <span>{festival.date}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <MapPin className="w-4 h-4" />
-                      <span>{festival.location}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock className="w-4 h-4" />
-                      <span>{festival.duration}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Users className="w-4 h-4" />
-                      <span>{festival.attendees}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 mb-4">
-                    {festival.highlights.map((highlight, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center space-x-2 text-sm text-slate-600"
-                      >
-                        <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
-                        <span>{highlight}</span>
+            {festivalsLoading
+              ? // Loading skeleton
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                  >
+                    <div className="h-64 bg-slate-200 animate-pulse"></div>
+                    <div className="p-6">
+                      <div className="h-6 bg-slate-200 animate-pulse rounded mb-4"></div>
+                      <div className="h-4 bg-slate-200 animate-pulse rounded mb-2"></div>
+                      <div className="h-4 bg-slate-200 animate-pulse rounded mb-4"></div>
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="h-4 bg-slate-200 animate-pulse rounded"
+                          ></div>
+                        ))}
                       </div>
-                    ))}
+                      <div className="h-12 bg-slate-200 animate-pulse rounded"></div>
+                    </div>
                   </div>
+                ))
+              : upcomingFestivals.map((festival, index) => (
+                  <motion.div
+                    key={festival._id}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <div className="relative h-64">
+                      <Image
+                        src={`/abstract-geometric-shapes.png?height=300&width=500&query=${festival.image}`}
+                        alt={festival.title}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1">
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="text-sm font-medium">
+                            {festival.rating}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
 
-                  <button className="w-full bg-purple-500 text-white py-3 rounded-lg font-semibold hover:bg-purple-600 transition-colors">
-                    Get Tickets
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                    <div className="p-6">
+                      <h4 className="text-2xl font-bold text-slate-800 mb-3">
+                        {festival.title}
+                      </h4>
+                      <p className="text-slate-600 mb-4">
+                        {festival.description}
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-4 text-sm text-slate-600 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="w-4 h-4" />
+                          <span>{festival.date}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="w-4 h-4" />
+                          <span>{festival.location}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Clock className="w-4 h-4" />
+                          <span>{festival.duration}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Users className="w-4 h-4" />
+                          <span>{festival.attendees}</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 mb-4">
+                        {festival.highlights.map((highlight, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center space-x-2 text-sm text-slate-600"
+                          >
+                            <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+                            <span>{highlight}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <button className="w-full bg-purple-500 text-white py-3 rounded-lg font-semibold hover:bg-purple-600 transition-colors">
+                        Get Tickets - {festival.ticketPrice}
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
           </div>
         </motion.div>
 
