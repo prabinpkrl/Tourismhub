@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"
 
 // Generic API response type
 interface ApiResponse<T> {
@@ -203,18 +203,29 @@ export const bookingsApi = {
     type?: "tours" | "accommodation" | "transport",
   ): Promise<ApiResponse<BookingServicesResponse>> => {
     const params = type ? `?type=${type}` : ""
-    return apiRequest<BookingServicesResponse>(`/bookings/services${params}`)
+    return apiRequest<BookingServicesResponse>(`/booking/services${params}`)
   },
 
   create: async (booking: CreateBookingRequest): Promise<ApiResponse<Booking>> => {
-    return apiRequest<Booking>("/bookings", {
+    return apiRequest<Booking>("/booking", {
       method: "POST",
       body: JSON.stringify(booking),
     })
   },
 
-  getById: async (id: string): Promise<ApiResponse<Booking>> => {
-    return apiRequest<Booking>(`/bookings/${id}`)
+  createTrekBooking: async (booking: CreateTrekBookingRequest): Promise<ApiResponse<TrekBooking>> => {
+    return apiRequest<TrekBooking>("/booking/trek", {
+      method: "POST",
+      body: JSON.stringify(booking),
+    })
+  },
+
+  getById: async (id: string): Promise<ApiResponse<Booking | TrekBooking>> => {
+    return apiRequest<Booking | TrekBooking>(`/booking/${id}`)
+  },
+
+  getByReference: async (reference: string): Promise<ApiResponse<Booking | TrekBooking>> => {
+    return apiRequest<Booking | TrekBooking>(`/booking/reference/${reference}`)
   },
 }
 
@@ -360,6 +371,24 @@ export interface CreateBookingRequest {
   specialRequests?: string
 }
 
+export interface CreateTrekBookingRequest {
+  destinationId: string
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  customerCountry: string
+  startDate: string
+  numberOfPeople: number
+  accommodationType: "teahouse" | "camping" | "luxury"
+  additionalServices?: Array<{
+    service: string
+    price: number
+  }>
+  specialRequests?: string
+  dietaryRequirements?: string
+  medicalConditions?: string
+}
+
 export interface Booking {
   id: number
   serviceId: number
@@ -372,4 +401,33 @@ export interface Booking {
   status: string
   createdAt: string
   bookingReference: string
+}
+
+export interface TrekBooking {
+  _id: string
+  bookingReference: string
+  bookingType: string
+  destinationId: string
+  destinationTitle: string
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  customerCountry: string
+  startDate: string
+  endDate: string
+  numberOfPeople: number
+  accommodationType: string
+  additionalServices: Array<{
+    service: string
+    price: number
+  }>
+  basePrice: number
+  totalPrice: number
+  specialRequests?: string
+  dietaryRequirements?: string
+  medicalConditions?: string
+  status: string
+  paymentStatus: string
+  createdAt: string
+  updatedAt: string
 }
